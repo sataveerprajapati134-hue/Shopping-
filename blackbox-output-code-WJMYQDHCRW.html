@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Xiaomi Settings Explorer</title>
+<style>
+  body {
+    margin: 0;
+    background-color: #000;
+    color: white;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    align-items: center;
+    justify-content: center;
+  }
+  .container {
+    max-width: 400px;
+    width: 90%;
+    text-align: center;
+  }
+  h1 {
+    font-weight: bold;
+    margin-bottom: 8px;
+    color: #ff0000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+  }
+  h1 .skull {
+    font-size: 1.3rem;
+  }
+  input[type="text"] {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    margin-bottom: 12px;
+    border: 2px solid #ff0000;
+    border-radius: 5px;
+    background: transparent;
+    color: #fff;
+    box-sizing: border-box;
+  }
+  input[type="text"]::placeholder {
+    color: #ff6666;
+    font-style: italic;
+  }
+  ul {
+    list-style: none;
+    padding: 0;
+    max-height: 60vh;
+    overflow-y: auto;
+    text-align: left;
+    border: 1px solid #222;
+    border-radius: 5px;
+    background: #111;
+  }
+  li {
+    padding: 12px 15px;
+    border-bottom: 1px solid #222;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+  }
+  li:last-child {
+    border-bottom: none;
+  }
+  li:hover {
+    background: #222;
+  }
+  .copy-btn {
+    color: #ff0000;
+    font-weight: bold;
+    cursor: pointer;
+    user-select: none;
+  }
+  .footer {
+    margin-top: 15px;
+    font-weight: bold;
+    font-size: 1.3em;
+    color: white;
+  }
+  .footer span {
+    color: #ff0000;
+    font-family: monospace;
+  }
+</style>
+</head>
+<body>
+  <div class="container" role="main">
+    <h1><span class="skull">💀</span>XIAOMI SETTINGS</h1>
+    <input type="text" id="search" placeholder="SEARCH ..." aria-label="Search Xiaomi phone models"/>
+    <ul id="phoneList" aria-live="polite" aria-relevant="all"></ul>
+    <div class="footer">EXPLORE <span>WITH EASE</span></div>
+  </div>
+
+<script>
+  const phoneModels = [
+    "XIAOMI REDMI NOTE 10 5G",
+    "XIAOMI POCO F4",
+    "XIAOMI REDMI A2",
+    "XIAOMI REDMI NOTE 7 PRO",
+    "XIAOMI REDMI 12C",
+    "XIAOMI REDMI NOTE 12",
+    "XIAOMI REDMI 9I",
+    "XIAOMI REDMI NOTE 4 PRO",
+    "XIAOMI REDMI A04E",
+    "XIAOMI REDMI 10 5G",
+    "XIAOMI POCO X5 5G",
+    "XIAOMI REDMI NOTE 12 4G",
+    "XIAOMI REDMI 10S",
+    "XIAOMI POCO M4 PRO 5G"
+  ];
+
+  const phoneListEl = document.getElementById('phoneList');
+  const searchEl = document.getElementById('search');
+
+  function renderList(list) {
+    phoneListEl.innerHTML = '';
+    if(list.length === 0) {
+      phoneListEl.innerHTML = '<li>No models found</li>';
+      return;
+    }
+    list.forEach(phone => {
+      const li = document.createElement('li');
+      li.textContent = phone;
+      // copy button
+      const copyBtn = document.createElement('span');
+      copyBtn.textContent = '📋';
+      copyBtn.className = 'copy-btn';
+      copyBtn.setAttribute('title', `Copy ${phone}`);
+      copyBtn.onclick = () => {
+        navigator.clipboard.writeText(phone).then(() => {
+          alert(`${phone} copied to clipboard`);
+        });
+      };
+      li.appendChild(copyBtn);
+      phoneListEl.appendChild(li);
+    });
+  }
+
+  searchEl.addEventListener('input', () => {
+    const query = searchEl.value.trim().toLowerCase();
+    if (!query) {
+      renderList(phoneModels);
+      return;
+    }
+    const filtered = phoneModels.filter(phone => phone.toLowerCase().includes(query));
+    renderList(filtered);
+  });
+
+  // Initial render
+  renderList(phoneModels);
+</script>
+</body>
+</html>
